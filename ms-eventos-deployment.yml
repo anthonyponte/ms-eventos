@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-eventos-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-eventos
+  template:
+    metadata:
+      labels:
+        app: ms-eventos
+    spec:
+      containers:
+        - name: ms-eventos-container
+          image: anthonyponte/ms-eventos:v1
+          args:
+            - "--spring.config.additional-location=file:/config/"
+          ports:
+            - containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9090
+            initialDelaySeconds: 400
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9090
+            initialDelaySeconds: 105
+            periodSeconds: 10
+            timeoutSeconds: 10
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: grupo2-secret
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grupo2-secret
+                  key: DB_PASSWORD
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "400Mi"
+            limits:
+              cpu: "200m"
+              memory: "600Mi"
+          volumeMounts:
+            - name: ms-eventos-volume
+              mountPath: /config/
+              subPath: application.yml
+      volumes:
+        - name: ms-eventos-volume
+          configMap:
+            name: ms-eventos-configmap
+            items:
+              - key: application.yml
+                path: application.yml
