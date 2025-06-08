@@ -1,4 +1,4 @@
-package com.sunat.pe.app.entities;
+package com.anthonyponte.eventos.entity;
 
 import java.util.Date;
 

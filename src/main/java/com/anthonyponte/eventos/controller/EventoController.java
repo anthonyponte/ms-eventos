@@ -1,4 +1,4 @@
-package com.sunat.pe.app.controller;
+package com.anthonyponte.eventos.controller;
 
 import java.util.Map;
 
@@ -14,45 +14,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sunat.pe.app.entities.Evento;
-import com.sunat.pe.app.service.IEventoService;
+import com.anthonyponte.eventos.entity.Evento;
+import com.anthonyponte.eventos.service.EventoService;
 
 @RestController
-@RequestMapping("/eventos")
+@RequestMapping("/api/v1/eventos")
 public class EventoController {
 	@Autowired
-	private IEventoService eventoService;
+	private EventoService service;
 
 	@Autowired
 	private Environment environment;
 
 	@GetMapping
-	public Map<String, Object> listarTodos() {
+	public Map<String, Object> listarEventos() {
 		return Map.of(
 				"POD_NAME", environment.getProperty("POD_NAME", "Unknown"),
 				"POD_ID", environment.getProperty("POD_ID", "Unkown"),
-				"eventos", eventoService.listarTodos());
+				"eventos", service.listarEventos());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Evento> obtenerPorId(@PathVariable Long id) {
-		return eventoService.obtenerPorId(id).map(ResponseEntity::ok)
+	public ResponseEntity<Evento> obtenerEventoPorId(@PathVariable Long id) {
+		return service.obtenerEventoPorId(id).map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
-	public ResponseEntity<Evento> crear(@RequestBody Evento evento) {
-		return ResponseEntity.ok(eventoService.guardar(evento));
+	public ResponseEntity<Evento> guardarEvento(@RequestBody Evento evento) {
+		return ResponseEntity.ok(service.guardarEvento(evento));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Evento> actualizar(@PathVariable Long id, @RequestBody Evento evento) {
-		return ResponseEntity.ok(eventoService.actualizar(id, evento));
+	public ResponseEntity<Evento> actualizarEvento(@PathVariable Long id, @RequestBody Evento evento) {
+		return service.actualizarEvento(id, evento)
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-		eventoService.eliminar(id);
+	public ResponseEntity<Void> eliminarEvento(@PathVariable Long id) {
+		service.eliminarEvento(id);
 		return ResponseEntity.noContent().build();
 	}
 }

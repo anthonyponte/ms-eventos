@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.12-SNAPSHOT</version>
+		<version>3.3.12</version>
 		<relativePath/>
 	</parent>
-	<groupId>com.sunat.pe</groupId>
+	<groupId>com.anthonyponte</groupId>
 	<artifactId>ms-eventos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-eventos</name>
-	<description>Permitir registrar, consultar, actualizar y eliminar eventos</description>
+	<description>Microservicio de eventos para el curso de Docker y Kubernetes Intermedio</description>
 	<url/>
 	<licenses>
 		<license/>
