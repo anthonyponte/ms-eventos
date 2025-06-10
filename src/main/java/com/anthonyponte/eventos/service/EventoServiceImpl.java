@@ -46,4 +46,9 @@ public class EventoServiceImpl implements EventoService {
 	public void eliminarEvento(Long id) {
 		repository.deleteById(id);
 	}
+
+	@Override
+	public boolean existeEventoPorId(Long id) {
+		return repository.existsById(id);
+	}
 }

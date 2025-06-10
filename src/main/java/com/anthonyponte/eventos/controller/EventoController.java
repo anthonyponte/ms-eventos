@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,5 +57,31 @@ public class EventoController {
 	public ResponseEntity<Void> eliminarEvento(@PathVariable Long id) {
 		service.eliminarEvento(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/{id}/existe")
+	public ResponseEntity<?> existeEventoPorId(@PathVariable Long id) {
+		boolean existe = service.existeEventoPorId(id);
+		return existe ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+	}
+
+	@PatchMapping("/{id}/disminuir-capacidad-max")
+	public ResponseEntity<?> disminuirCapacidadMax(@PathVariable Long id) {
+		return service.obtenerEventoPorId(id).map(evento -> {
+			if (evento.getCapacidadMax() == 0) {
+				return ResponseEntity.badRequest()
+						.body(Map.of("mensaje", "El evento no tiene capacidad disponible"));
+			}
+			evento.setCapacidadMax(evento.getCapacidadMax() - 1);
+			return ResponseEntity.ok(service.guardarEvento(evento));
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	@PatchMapping("/{id}/aumentar-capacidad-max")
+	public ResponseEntity<?> aumentarCapacidadMax(@PathVariable Long id) {
+		return service.obtenerEventoPorId(id).map(evento -> {
+			evento.setCapacidadMax(evento.getCapacidadMax() + 1);
+			return ResponseEntity.ok(service.guardarEvento(evento));
+		}).orElse(ResponseEntity.notFound().build());
 	}
 }

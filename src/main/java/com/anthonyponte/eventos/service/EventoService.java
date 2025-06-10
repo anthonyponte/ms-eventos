@@ -18,4 +18,6 @@ public interface EventoService {
 	public Optional<Evento> actualizarEvento(Long id, Evento evento);
 
 	public void eliminarEvento(Long id);
+
+	public boolean existeEventoPorId(Long id);
 }
