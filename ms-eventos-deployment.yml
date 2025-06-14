@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ms-eventos-container
-          image: anthonyponte/ms-eventos:v3
+          image: anthonyponte/ms-eventos:v1
           args:
             - "--spring.config.additional-location=file:/config/"
           ports:
@@ -37,12 +37,12 @@ spec:
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: dki-secret
+                  name: oracle-db-secret
                   key: DB_USERNAME
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dki-secret
+                  name: oracle-db-secret
                   key: DB_PASSWORD
             - name: POD_NAME
               valueFrom:

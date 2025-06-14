@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oracle-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oracle-db
+  template:
+    metadata:
+      labels:
+        app: oracle-db
+    spec:
+      containers:
+      - name: oracle-db-container
+        image: container-registry.oracle.com/database/express:21.3.0-xe
+        ports:
+          - containerPort: 1521
+        env:
+          - name: ORACLE_SID
+            value: "XE"
+          - name: ORACLE_PDB
+            value: "XEPDB1"
+          - name: ORACLE_PWD
+            value: "dkpassword"
+          - name: ORACLE_CHARACTERSET
+            value: "AL32UTF8"
+          - name: NLS_LANG
+            value: "AMERICAN_AMERICA.AL32UTF8"
+        volumeMounts:
+          - name: oracle-db-data
+            mountPath: /opt/oracle/oradata
+          - name: oracle-db-scripts
+            mountPath: /opt/oracle/scripts/startup
+      volumes:
+        - name: oracle-db-data
+          persistentVolumeClaim:
+            claimName: oracle-db-pvc
+        - name: oracle-db-scripts
+          configMap:
+            name: oracle-db-configmap
