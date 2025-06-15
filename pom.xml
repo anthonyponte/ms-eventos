@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.anthonyponte</groupId>
 	<artifactId>ms-eventos</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>ms-eventos</name>
-	<description>Microservicio de eventos para el curso de Docker y Kubernetes Intermedio</description>
+	<description>Microservicio de eventos para el proyecto final del curso de Docker y Kubernetes Intermedio</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -57,7 +57,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>			
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -70,10 +70,6 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-kubernetes-client-loadbalancer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

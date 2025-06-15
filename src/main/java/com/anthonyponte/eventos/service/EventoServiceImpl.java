@@ -1,10 +1,11 @@
 package com.anthonyponte.eventos.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.anthonyponte.eventos.entity.Evento;
 import com.anthonyponte.eventos.repository.EventoRepository;
@@ -20,8 +21,11 @@ public class EventoServiceImpl implements EventoService {
 	}
 
 	@Override
-	public Optional<Evento> obtenerEventoPorId(Long id) {
-		return repository.findById(id);
+	public Evento obtenerEventoPorId(Long id) {
+		Evento evento = repository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento no encontrado"));
+
+		return evento;
 	}
 
 	@Override
@@ -30,25 +34,24 @@ public class EventoServiceImpl implements EventoService {
 	}
 
 	@Override
-	public Optional<Evento> actualizarEvento(Long id, Evento evento) {
-		return repository.findById(id).map(e -> {
-			e.setNombre(evento.getNombre());
-			e.setDescripcion(evento.getDescripcion());
-			e.setFecha(evento.getFecha());
-			e.setUbicacion(evento.getUbicacion());
-			e.setCapacidadMax(evento.getCapacidadMax());
+	public Evento actualizarEvento(Long id, Evento evento) {
+		Evento e = repository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento no encontrado"));
 
-			return repository.save(e);
-		});
+		e.setNombre(evento.getNombre());
+		e.setDescripcion(evento.getDescripcion());
+		e.setFecha(evento.getFecha());
+		e.setUbicacion(evento.getUbicacion());
+		e.setCapacidadMax(evento.getCapacidadMax());
+
+		return repository.save(e);
 	}
 
 	@Override
-	public void eliminarEvento(Long id) {
+	public void eliminarEventoPorId(Long id) {
+		repository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento no encontrado"));
+
 		repository.deleteById(id);
-	}
-
-	@Override
-	public boolean existeEventoPorId(Long id) {
-		return repository.existsById(id);
 	}
 }

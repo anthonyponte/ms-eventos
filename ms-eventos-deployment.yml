@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ms-eventos-container
-          image: anthonyponte/ms-eventos:v1
+          image: anthonyponte/ms-eventos:1.0.0
           args:
             - "--spring.config.additional-location=file:/config/"
           ports:
