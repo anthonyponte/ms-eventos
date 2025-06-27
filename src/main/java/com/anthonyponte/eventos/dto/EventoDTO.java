@@ -1,29 +1,11 @@
-package com.anthonyponte.eventos.entity;
+package com.anthonyponte.eventos.dto;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "eventos")
-public class Evento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EventoDTO {
     private Long id;
-
-    @Column(nullable = false)
     private String nombre;
-
-    @Column(nullable = false)
     private String descripcion;
-
-    @Column(nullable = false)
-    private LocalDateTime fecha;
-
-    @Column(nullable = false)
+    private String fecha;
     private String ubicacion;
-
-    @Column(nullable = false)
     private Integer capacidadMax;
 
     public Long getId() {
@@ -50,11 +32,11 @@ public class Evento {
         this.descripcion = descripcion;
     }
 
-    public LocalDateTime getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
