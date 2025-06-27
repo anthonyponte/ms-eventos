@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.anthonyponte.eventos.dto.EventoDTO;
 import com.anthonyponte.eventos.entity.Evento;
+import com.anthonyponte.eventos.mapper.EventoMapper;
 import com.anthonyponte.eventos.service.EventoService;
 
 @RestController
@@ -25,29 +27,41 @@ public class EventoController {
 	private EventoService service;
 
 	@GetMapping
-	public List<Evento> listarEventos() {
-		return service.listarEventos();
+	public List<EventoDTO> listarEventos() {
+		return service.listarEventos()
+				.stream()
+				.map(EventoMapper::toDTO)
+				.toList();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Evento> obtenerEventoPorId(@PathVariable Long id) {
-		Evento e = service.obtenerEventoPorId(id);
-		return ResponseEntity.ok(e);
+	public ResponseEntity<EventoDTO> obtenerEventoPorId(@PathVariable Long id) {
+		Evento evento = service.obtenerEventoPorId(id);
+		EventoDTO dto = EventoMapper.toDTO(evento);
+
+		return ResponseEntity.ok(dto);
 	}
 
 	@PostMapping
-	public ResponseEntity<?> guardarEvento(@RequestBody Evento evento) {
+	public ResponseEntity<?> guardarEvento(@RequestBody EventoDTO eventoDTO) {
+		Evento evento = EventoMapper.toEntity(eventoDTO);
 		Evento e = service.guardarEvento(evento);
+		EventoDTO dto = EventoMapper.toDTO(e);
+
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}")
 				.build(e.getId());
-		return ResponseEntity.created(uri).build();
+
+		return ResponseEntity.created(uri).body(dto);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Evento> actualizarEvento(@PathVariable Long id, @RequestBody Evento evento) {
+	public ResponseEntity<EventoDTO> actualizarEvento(@PathVariable Long id, @RequestBody EventoDTO eventoDTO) {
+		Evento evento = EventoMapper.toEntity(eventoDTO);
 		Evento e = service.actualizarEvento(id, evento);
-		return ResponseEntity.ok(e);
+		EventoDTO dto = EventoMapper.toDTO(e);
+
+		return ResponseEntity.ok(dto);
 	}
 
 	@DeleteMapping("/{id}")
