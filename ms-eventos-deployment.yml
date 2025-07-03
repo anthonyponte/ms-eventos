@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ms-eventos-deployment
+  labels:
+    app: ms-eventos
 spec:
   replicas: 1
   selector:
@@ -13,7 +15,7 @@ spec:
         app: ms-eventos
     spec:
       containers:
-        - name: ms-eventos-container
+        - name: ms-eventos
           image: anthonyponte/ms-eventos:1.0.1
           args:
             - "--spring.config.additional-location=file:/config/"
