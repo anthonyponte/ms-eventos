@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.anthonyponte</groupId>
 	<artifactId>ms-eventos</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>ms-eventos</name>
 	<description>Microservicio de eventos para el proyecto final del curso de Docker y Kubernetes Intermedio</description>
 	<url/>
